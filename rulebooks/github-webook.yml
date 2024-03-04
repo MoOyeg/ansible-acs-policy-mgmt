@@ -1,0 +1,30 @@
+- name: Listen to Events
+  hosts: localhost
+  sources:
+  - name: Listen to the Host and Port
+    ansible.eda.webhook:
+      host: 0.0.0.0
+      port: 5001
+  rules:
+
+  # Run Update Playbook
+  #
+  - name: Rules to process the web
+    condition: event.payload is defined
+    action:
+      run_job_template:
+        name: update
+        organization: Default
+        job_args:
+          extra_vars:
+            event: "{{ event }}"
+
+  # Just print the payload
+  #
+  - name: print output
+    condition: event.payload is defined
+    action:
+      debug:
+        msg:
+          - EVENT WAS NOT PROCESSED
+          - "EVENT IS  {{ event }}"
