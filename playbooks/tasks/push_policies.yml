@@ -14,15 +14,51 @@
     cmd: "git checkout {{ branch }} 2>/dev/null || git checkout -b {{ branch }}"
     chdir: "files/policies_actual"
 
+- name: Get hostname from url
+  ansible.builtin.set_fact:
+    git_hostname: '{{ git_url | urlsplit("hostname") }}{{ git_url | urlsplit("path") }}'
 
-- name: Push policies to branch
-  git_acp:
-    user: "{{ git_user }}"
-    token: "{{ git_pat }}"
-    path: "files/policies_actual"
-    branch: "{{ branch }}"
-    comment: "{{ comment }}"
-    remote: origin
-    add: [ "." ]
-    mode: https
-    url: "{{ git_url }}"
+- name: echo git-url
+  ansible.builtin.debug:
+    var: git_hostname
+
+- name: Git set url token
+  shell:
+    cmd: "git remote set-url origin https://{{ git_user }}:{{ git_pat }}@{{ git_hostname }}"
+    chdir: "files/policies_actual"
+
+- name: Git Add
+  shell:
+    cmd: "git add ."
+    chdir: "files/policies_actual" 
+  register: git_add_success
+  ignore_errors: yes
+
+- fail: msg="{{ git_add_success.stdout }}"
+  when: "git_add_success.rc != 0 and 'nothing to commit' not in git_add_success.stdout"
+  
+- name: Git Commit
+  shell:
+    cmd: "git commit -m \'{{ comment }}\'"
+    chdir: "files/policies_actual"
+  environment:
+    GIT_AUTHOR_NAME: "{{ git_user }}"
+    GIT_AUTHOR_EMAIL: "{{ git_user }}@test.com"
+    GIT_COMMITTER_NAME: "{{ git_user }}"
+    GIT_COMMITTER_EMAIL: "{{ git_user }}@test.com"
+  register: git_commit_success
+  ignore_errors: yes
+
+- fail: msg="{{ git_commit_success.stdout }}"
+  when: "git_commit_success.rc != 0 and 'nothing to commit' not in git_commit_success.stdout"
+  
+- name: push code
+  shell:
+    cmd: "git push -u origin {{ branch }}"
+    chdir: "files/policies_actual"
+  environment:
+    GIT_AUTHOR_NAME: "{{ git_user }}"
+    GIT_AUTHOR_EMAIL: "{{ git_user }}@test.com"
+    GIT_COMMITTER_NAME: "{{ git_user }}"
+    GIT_COMMITTER_EMAIL: "{{ git_user }}@test.com"
+  when: "git_commit_success.rc == 0"
