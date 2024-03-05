@@ -1,0 +1,46 @@
+{
+    "id": "272b7b47-875c-43c7-bd3a-26320f27c3a9",
+    "name": "sample_test_policy_eda",
+    "description": "Fake Sample Policy For - https://github.com/MoOyeg/ansible-acs-policy-mgmt.",
+    "rationale": "",
+    "remediation": "",
+    "disabled": false,
+    "categories": [
+        "Docker CIS"
+    ],
+    "lifecycleStages": [
+        "DEPLOY"
+    ],
+    "eventSource": "NOT_APPLICABLE",
+    "exclusions": [],
+    "scope": [],
+    "severity": "LOW_SEVERITY",
+    "enforcementActions": [],
+    "notifiers": [],
+    "lastUpdated": "2024-03-05T00:55:18.536495603Z",
+    "SORTName": "",
+    "SORTLifecycleStage": "",
+    "SORTEnforcement": false,
+    "policyVersion": "1.1",
+    "policySections": [
+        {
+            "sectionName": "Policy Section 1",
+            "policyGroups": [
+                {
+                    "fieldName": "Image Registry",
+                    "booleanOperator": "OR",
+                    "negate": false,
+                    "values": [
+                        {
+                            "value": "sample-policy-registry.io"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "mitreAttackVectors": [],
+    "criteriaLocked": false,
+    "mitreVectorsLocked": false,
+    "isDefault": false
+}
