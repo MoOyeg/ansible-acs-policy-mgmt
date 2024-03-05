@@ -1,12 +1,12 @@
-# Manage policies in ACS with Ansible
+# Manage policies in ACS with Ansible/Event Driven Ansible
 
 ## Challenge
 
-We want to manage ACS policies in a GitOps fashion with two major goals:
+We want to manage ACS policies in a GitOps fashion with 3 major goals:
 
 1.  All policies are stored in git and version controlled.
 2.  Policies can be created using the ACS Central GUI.
-3. Streamline the process using GitOps
+3. Streamline the process using EDA to act as a pseudo gitops controller
 
 ## Solution
 
