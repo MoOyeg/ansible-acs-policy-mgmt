@@ -1,4 +1,4 @@
-- name: Listen to Events
+- name: Listen to Events from Github
   hosts: localhost
   sources:
   - name: Listen to the Host and Port
@@ -8,8 +8,8 @@
   rules:
 
   # Run Update Playbook
-  #
-  - name: Rules to process the web
+
+  - name: Rules to process the Web Payload Recieved 
     condition: event.payload is defined
     action:
       run_job_template:

@@ -16,6 +16,11 @@
 
 
   tasks:
+  - name: Check if this playbook was triggered via EDA ansible.eda.webhook
+    ansible.builtin.debug:
+      msg: "This playbook was triggered via EDA ansible.eda.webhook - Event Payload {{ event }}"
+    when: event is defined
+
   - name: Initial fetch
     include_tasks:
       file: tasks/fetch_policies.yml
