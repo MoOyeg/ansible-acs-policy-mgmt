@@ -12,10 +12,14 @@
     git_user: "{{ vaulted_git_user }}"
     git_pat: "{{ vaulted_git_pat }}"
     git_url: "{{ vaulted_git_url }}"
-    branch: main
+    branch: working
 
 
   tasks:
+  - name: fail_test
+    ansible.builtin.debug:
+     msg: "{{ event }}"
+     
   - name: Check if this playbook was triggered via EDA ansible.eda.webhook
     ansible.builtin.debug:
       msg: "This playbook was triggered via EDA ansible.eda.webhook - Event Payload {{ event }}"
