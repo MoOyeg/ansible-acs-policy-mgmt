@@ -15,14 +15,19 @@
     branch: working
 
   tasks:
-  - name: Check how playbook was triggered
+  - name: Check if playbook was EDA triggered
     ansible.builtin.set_fact:
       eda_event_available: "True"
     when: ansible_eda.event is defined
 
   - ansible.builtin.debug:
-      msg: "Playbook was triggered via EDA Controller from commit {{ ansible_eda.event.payload.head_commit.id }} in branch {{ ansible_eda.event.payload.ref }}"
-    when: ansible_eda.event is defined
+      msg: "Playbook was triggered via EDA Controller from git commit {{ ansible_eda.event.payload.head_commit.id }} in branch {{ ansible_eda.event.payload.ref }}"
+    when: eda_event_available == "True"
+
+  - name: Set the event payload variable if not provided
+    set_fact:
+      ansible_eda.event: "None"
+    when: eda_event_available != "True"
 
   - name: Initial fetch
     include_tasks:
@@ -43,7 +48,11 @@
   - name: Process policies
     include_tasks:
       file: tasks/process_policies.yml
+    vars:
+      ansible_eda.event: "{{ ansible_eda.event }}"
+      eda_event_available: "{{ eda_event_available }}"
     register: process_policies
+
 
   - debug: var=process_policies
 
