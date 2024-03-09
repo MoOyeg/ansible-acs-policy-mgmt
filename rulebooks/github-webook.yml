@@ -16,7 +16,7 @@
         organization: Default
         job_args:
           extra_vars:
-            event: "{{ event }}"
+            bar: "BAR"
 
   # Just print the payload
   #
