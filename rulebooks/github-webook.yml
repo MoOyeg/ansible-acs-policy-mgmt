@@ -14,9 +14,6 @@
       run_job_template:
         name: update
         organization: Default
-        job_args:
-          extra_vars:
-            bar: "BAR"
 
   # Just print the payload
   #
