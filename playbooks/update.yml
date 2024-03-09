@@ -14,17 +14,16 @@
     git_url: "{{ vaulted_git_url }}"
     branch: working
 
-
   tasks:
-  - name: fail_test
-    ansible.builtin.debug:
-     msg: "{{ansible_eda.event}}"
+  - name: Check how playbook was triggered
+    ansible.builtin.facts:
+      eda_event_available: "True"
+    when: ansible_eda.event is defined
 
-  - name: Check if this playbook was triggered via EDA ansible.eda.webhook
-    ansible.builtin.debug:
-      msg: "This playbook was triggered via EDA ansible.eda.webhook - Event Payload {{ event }}"
-    when: event is defined
-
+  - ansible.builtin.debug:
+      msg: "Playbook was triggered via EDA Controller from commit {{ ansible_eda.event.payload.head_commit.id }} in branch {{ ansible_eda.event.payload.ref }}"
+    when: ansible_eda.event is defined
+    
   - name: Initial fetch
     include_tasks:
       file: tasks/fetch_policies.yml
