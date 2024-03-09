@@ -8,7 +8,6 @@
   rules:
 
   # Run Update Playbook
-
   - name: Rules to process the Web Payload Recieved 
     condition: event.payload is defined
     action:

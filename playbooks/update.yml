@@ -18,7 +18,7 @@
   tasks:
   - name: fail_test
     ansible.builtin.debug:
-     msg: "{{ ansible_eda.event }}"
+     msg: "{{ ansible_eda.events }}"
 
   - name: Check if this playbook was triggered via EDA ansible.eda.webhook
     ansible.builtin.debug:
