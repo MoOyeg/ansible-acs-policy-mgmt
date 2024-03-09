@@ -16,14 +16,14 @@
 
   tasks:
   - name: Check how playbook was triggered
-    ansible.builtin.facts:
+    ansible.builtin.set_fact:
       eda_event_available: "True"
     when: ansible_eda.event is defined
 
   - ansible.builtin.debug:
       msg: "Playbook was triggered via EDA Controller from commit {{ ansible_eda.event.payload.head_commit.id }} in branch {{ ansible_eda.event.payload.ref }}"
     when: ansible_eda.event is defined
-    
+
   - name: Initial fetch
     include_tasks:
       file: tasks/fetch_policies.yml
