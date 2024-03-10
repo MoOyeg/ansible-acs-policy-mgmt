@@ -30,10 +30,6 @@
     changed: true
   with_items: "{{ desired_files | difference(actual_files) }}"
 
-- name: test
-  ansible.builtin.debug:
-    msg: "defined - {{ eda_event }}"
-
 - name: Update existing policies
   include_tasks: policy_process.yml
   vars:

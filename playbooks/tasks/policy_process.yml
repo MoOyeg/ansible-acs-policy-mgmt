@@ -1,7 +1,3 @@
-- name: test
-  ansible.builtin.debug:
-    msg: "defined22 - {{ eda_event }}"
-
 - name: delete actual policy if IDs don't match {{ desired_policy_body.name }}
   include_tasks: policy_delete.yml
   vars:
