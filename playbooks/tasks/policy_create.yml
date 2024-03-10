@@ -5,7 +5,7 @@
 
 - name: Set policy description if Git Information is available
   ansible.builtin.set_fact:
-    desired_policy_body.description: "{{ desired_policy_body.description + ' - ' + new_commit_id }}"
+    policy_body.description: "{{ policy_body.description + ' - ' + new_commit_id }}"
   when: eda_event is defined
 
 - name: create new policy
