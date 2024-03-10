@@ -39,8 +39,6 @@
     include_tasks:
       file: tasks/get_policies.yml
 
-  - name: Set 
-
   - name: Process policies
     include_tasks:
       file: tasks/process_policies.yml
