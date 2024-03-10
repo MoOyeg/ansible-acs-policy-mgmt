@@ -3,10 +3,10 @@
     new_commit_id: "git_commit_id: {{ eda_event.commits.0.id }}"
   when: eda_event != None
 
-# - name: Set policy description if Git Information is available
-#   ansible.builtin.set_fact:
-#     desired_policy_body.description: "{{ desired_policy_body.description | regex_replace('git_commit_id\\:\\s([A-Za-z0-9]*)', new_commit_id ) }}"
-#   when: eda_event != None
+- name: Set policy description if Git Information is available
+  ansible.builtin.set_fact:
+    desired_policy_body.description: "{{ desired_policy_body.description | regex_replace('git_commit_id\\:\\s([A-Za-z0-9]*)', new_commit_id ) }}"
+  when: eda_event != None
 
 - name: update policy if bodies dont match
   uri:
