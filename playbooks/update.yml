@@ -24,11 +24,6 @@
       msg: "Playbook was triggered via EDA Controller from git commit {{ ansible_eda.event.payload.head_commit.id }} in branch {{ ansible_eda.event.payload.ref }}"
     when: eda_event_available == "True"
 
-  - name: Set the event payload variable if not provided
-    set_fact:
-      ansible_eda.event: "None"
-    when: eda_event_available != "True"
-
   - name: Initial fetch
     include_tasks:
       file: tasks/fetch_policies.yml
@@ -49,7 +44,7 @@
     include_tasks:
       file: tasks/process_policies.yml
     vars:
-      ansible_eda.event: "{{ ansible_eda.event }}"
+      event: "{{ ansible_eda.event | default(None) }}"
       eda_event_available: "{{ eda_event_available }}"
     register: process_policies
 
