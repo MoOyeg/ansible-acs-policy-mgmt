@@ -44,8 +44,8 @@
     include_tasks:
       file: tasks/process_policies.yml
     vars:
-      event: "{{ ansible_eda.event | default(None) }}"
-      eda_event_available: "{{ eda_event_available | default(False) }}"
+      event: "{{ ansible_eda.event | default('') }}"
+      eda_event_available: "{{ eda_event_available | default('False') }}"
     register: process_policies
 
 
