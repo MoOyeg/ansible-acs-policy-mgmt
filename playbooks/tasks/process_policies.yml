@@ -35,7 +35,7 @@
   vars:
     desired_policy_body: "{{ lookup('file', 'files/policies_desired/{{ item }}') | from_json }}"
     actual_policy_body: "{{ lookup('file', 'files/policies_actual/{{ item }}') | from_json }}"
-    ansible_eda.event: "{{ ansible_eda.event }}"
+    ansible_eda.event: "{{ event }}"
     eda_event_available: "{{ eda_event_available }}"
     changed: true
   with_items: "{{ desired_files | intersect(actual_files) }}"
