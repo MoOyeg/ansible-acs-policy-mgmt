@@ -4,6 +4,22 @@
     policy_body: "{{ actual_policy_body }}"
   when: actual_policy_body.id != desired_policy_body.id
 
+- name: Check if policy file was added
+  ansible.builtin.set_fact:
+    policy_file_added: "True"
+  when: 
+    - eda_event_available == "True"
+    - event.payload.commits.0.added contains policy_file_name
+  ignore_errors: true
+
+- name: Check if policy file was updated
+  ansible.builtin.set_fact:
+    policy_file_updated: "True"
+  when: 
+    - eda_event_available == "True"
+    - event.payload.commits.0.added contains policy_file_name
+  ignore_errors: true
+
 - name: update policy if bodies dont match {{ desired_policy_body.name }}
   include_tasks: policy_update.yml
   vars:
