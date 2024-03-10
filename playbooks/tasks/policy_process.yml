@@ -4,6 +4,10 @@
     policy_body: "{{ actual_policy_body }}"
   when: actual_policy_body.id != desired_policy_body.id
 
+- name: test
+  ansible.builtin.debug:
+    msg: "defined - {{ eda_event }}"
+
 - name: update policy if bodies dont match {{ desired_policy_body.name }}
   include_tasks: policy_update.yml
   vars:
