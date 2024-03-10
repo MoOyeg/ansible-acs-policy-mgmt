@@ -42,8 +42,8 @@
   - name: Process policies
     include_tasks:
       file: tasks/process_policies.yml
-    vars:
-      eda_event: "{{ eda_event }}"
+    # vars:
+    #   eda_event: "{{ eda_event }}"
     register: process_policies
 
   - debug: var=process_policies
