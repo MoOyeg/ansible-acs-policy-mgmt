@@ -1,12 +1,12 @@
 - name: Set new_commit_id
   ansible.builtin.set_fact:
     new_commit_id: "git_commit_id: {{ event.commits.0.id }}"
-  when: eda_event_available == "True"
+  when: eda_event != None
 
 - name: Set policy description if Git Information is available
   ansible.builtin.set_fact:
     desired_policy_body.description: "{{ desired_policy_body.description + ' - ' + new_commit_id }}"
-  when: eda_event_available == "True"
+  when: eda_event != None
 
 - name: create new policy
   uri:
