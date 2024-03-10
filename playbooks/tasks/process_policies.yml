@@ -36,8 +36,7 @@
     desired_policy_body: "{{ lookup('file', 'files/policies_desired/{{ item }}') | from_json }}"
     actual_policy_body: "{{ lookup('file', 'files/policies_actual/{{ item }}') | from_json }}"
     policy_file_name: "{{ item }}"
-    event: "{{ event }}"
-    eda_event_available: "{{ eda_event_available }}"
+    eda_event: "{{ eda_event }}"
     changed: true
   with_items: "{{ desired_files | intersect(actual_files) }}"
   when: (desired_policy_body | dict2items | rejectattr("key", "eq", "id") | list | items2dict ) != (actual_policy_body | dict2items | rejectattr("key", "eq", "id") | list | items2dict )
