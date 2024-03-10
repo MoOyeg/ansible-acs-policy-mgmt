@@ -22,7 +22,6 @@
 
   - ansible.builtin.debug:
       msg: "Playbook was triggered via EDA Controller from git commit {{ ansible_eda.event.payload.head_commit.id }} in branch {{ ansible_eda.event.payload.ref }}"
-    when: eda_event_available == "True"
 
   - name: Initial fetch
     include_tasks:
