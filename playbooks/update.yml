@@ -23,7 +23,11 @@
   - ansible.builtin.debug:
       msg: "Playbook was triggered via EDA Controller from git commit {{ ansible_eda.event.payload.head_commit.id }} in branch {{ ansible_eda.event.payload.ref }}"
     when: ansible_eda.event.payload is defined
-    
+
+  - name: test
+    ansible.builtin.debug:
+      msg: "value is {{ eda_event_available }}"
+
   - name: Initial fetch
     include_tasks:
       file: tasks/fetch_policies.yml
