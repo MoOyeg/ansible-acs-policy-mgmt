@@ -5,7 +5,34 @@
 
 - name: Set policy description if Git Information is available
   ansible.builtin.set_fact:
-    desired_policy_body.description: "{{ desired_policy_body.description | regex_replace('git_commit_id\\:\\s([A-Za-z0-9]*)', new_commit_id ) }}"
+    new_description: "{{ desired_policy_body.description | regex_replace('git_commit_id\\:\\s([A-Za-z0-9]*)', new_commit_id ) }}"
+  when: eda_event is defined
+
+- name: Update policy description if Git Information is available
+  ansible.builtin.set_fact:
+    new_policy_body: "{{ desired_policy_body | combine(new_item, recursive=true) }}"
+  vars:
+    new_item: "{ 'description': '{{ new_description }}' }"
+  loop: "{{ desired_policy_body | dict2items }}"
+  loop_control:
+    loop_var: policy_item
+  when: eda_event is defined
+
+- name: update policy if bodies dont match
+  uri:
+    url: https://{{ acs_host }}/v1/policies/{{ policy_body.id }}
+    headers:
+      Authorization: "Bearer {{ acs_token }}"
+    method: PUT
+    body: '{{ new_policy_body  }}'
+    force_basic_auth: yes
+    status_code: 200
+    body_format: json
+    validate_certs: false
+  register: answer
+  no_log: false
+  changed_when: true
+  notify: "Push to git"
   when: eda_event is defined
 
 - name: update policy if bodies dont match
@@ -23,3 +50,4 @@
   no_log: false
   changed_when: true
   notify: "Push to git"
+  when: eda_event is not defined
