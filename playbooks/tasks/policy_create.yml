@@ -1,3 +1,10 @@
+- name: test file name
+  ansible.builtin.debug:
+    msg: "file_created: {{ policy_file_name }}"
+  when: 
+    - ansible_eda.event.payload is defined
+    - policy_file_name in eda_event.payload.commits.0.added
+
 - name: Create Policy for Files with Git Information Available
   block:
     - name: Check If file was among added files from Git Event Info
@@ -21,7 +28,7 @@
       loop_control:
         loop_var: policy_item
 
-    - name: create new policy
+    - name: create new policy if Git Information is available
       uri:
         url: https://{{ acs_host }}/v1/policies?enableStrictValidation=true
         headers:
