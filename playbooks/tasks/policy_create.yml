@@ -1,46 +1,44 @@
-- name: Check If file was among added files from Git Event Info
-  ansible.builtin.set_fact:
-    file_created: "true"
+- name: Create Policy for Files with Git Information Available
+  block:
+    - name: Check If file was among added files from Git Event Info
+      ansible.builtin.set_fact:
+        file_created: "true"
+
+    - name: Set new_commit_id
+      ansible.builtin.set_fact:
+        new_commit_id: "git_commit_id: {{ eda_event.payload.commits.0.id }}"
+
+    - name: Set policy description if Git Information is available
+      ansible.builtin.set_fact:
+        new_description: "{{ policy_body.description + ' - ' + new_commit_id }}"
+
+    - name: Set policy description if Git Information is available
+      ansible.builtin.set_fact:
+        new_policy_body: "{{ policy_body | combine(new_item, recursive=true) }}"
+      vars:
+        new_item: "{ 'description': '{{ new_description }}' }"
+      loop: "{{ policy_body | dict2items }}"
+      loop_control:
+        loop_var: policy_item
+
+    - name: create new policy
+      uri:
+        url: https://{{ acs_host }}/v1/policies?enableStrictValidation=true
+        headers:
+          Authorization: "Bearer {{ acs_token }}"
+        method: POST
+        body: '{{ new_policy_body | dict2items | rejectattr("key", "eq", "id") | list | items2dict }}'
+        force_basic_auth: yes
+        status_code: 200
+        body_format: json
+        validate_certs: false
+      register: answer
+      no_log: false
+      changed_when: true
+      notify: "Push to git"
   when: 
     - ansible_eda.event.payload is defined
     - policy_file_name in eda_event.payload.commits.0.added
-
-- name: Set new_commit_id
-  ansible.builtin.set_fact:
-    new_commit_id: "git_commit_id: {{ eda_event.payload.commits.0.id }}"
-  when: eda_event is defined
-
-- name: Set policy description if Git Information is available
-  ansible.builtin.set_fact:
-    new_description: "{{ policy_body.description + ' - ' + new_commit_id }}"
-  when: eda_event is defined
-
-- name: Set policy description if Git Information is available
-  ansible.builtin.set_fact:
-    new_policy_body: "{{ policy_body | combine(new_item, recursive=true) }}"
-  vars:
-    new_item: "{ 'description': '{{ new_description }}' }"
-  loop: "{{ policy_body | dict2items }}"
-  loop_control:
-    loop_var: policy_item
-  when: eda_event is defined
-
-- name: create new policy
-  uri:
-    url: https://{{ acs_host }}/v1/policies?enableStrictValidation=true
-    headers:
-      Authorization: "Bearer {{ acs_token }}"
-    method: POST
-    body: '{{ new_policy_body | dict2items | rejectattr("key", "eq", "id") | list | items2dict }}'
-    force_basic_auth: yes
-    status_code: 200
-    body_format: json
-    validate_certs: false
-  register: answer
-  no_log: false
-  changed_when: true
-  notify: "Push to git"
-  when: eda_event is defined
 
 - name: create new policy
   uri:
