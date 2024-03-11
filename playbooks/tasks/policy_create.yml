@@ -62,4 +62,4 @@
   no_log: false
   changed_when: true
   notify: "Push to git"
-  when: answer is not defined
+  when: file_created is defined
