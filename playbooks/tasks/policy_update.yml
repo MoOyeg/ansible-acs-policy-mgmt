@@ -1,16 +1,17 @@
-- name: Echo File Name to be Updated with Git Information
-  ansible.builtin.debug:
-    msg: "File: {{ policy_file_name }} - was updated via Git"
+- block:
+    - name: Echo File Name to be Updated with Git Information
+      ansible.builtin.debug:
+      msg: "File: {{ policy_file_name }} - was updated via Git"
+
+    - name: Set file_updated fact
+      ansible.builtin.set_fact:
+        file_updated: "true"
   when: 
     - ansible_eda.event.payload is defined
     - policy_file_name in eda_event.payload.commits.0.added
 
 - name: Update Policy Information for Files with Git Information Available
   block:
-    - name: Check If file was among updated files from Git Event Info
-      ansible.builtin.set_fact:
-        file_updated: "true"
-
     - name: Set new_commit_id
       ansible.builtin.set_fact:
         new_commit_id: "git_commit_id: {{ eda_event.payload.commits.0.id }}"
@@ -62,4 +63,4 @@
   no_log: false
   changed_when: true
   notify: "Push to git"
-  when: file_updated is defined
+  when: file_updated is not defined
