@@ -1,6 +1,6 @@
-- name: test file name
+- name: Echo File Name to be Created with Git Information
   ansible.builtin.debug:
-    msg: "file_created: {{ policy_file_name }}"
+    msg: "File: {{ policy_file_name }} - was recieved as a new file to be created via Git"
   when: 
     - ansible_eda.event.payload is defined
     - policy_file_name in eda_event.payload.commits.0.added
@@ -62,4 +62,4 @@
   no_log: false
   changed_when: true
   notify: "Push to git"
-  when: eda_event is not defined
+  when: answer is not defined
