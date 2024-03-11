@@ -28,6 +28,7 @@
   vars:
     policy_body: "{{ lookup('file', 'files/policies_desired/{{ item }}') | from_json }}"
     changed: true
+    policy_file_name: "{{ item }}"
   with_items: "{{ desired_files | difference(actual_files) }}"
 
 - name: Update existing policies
