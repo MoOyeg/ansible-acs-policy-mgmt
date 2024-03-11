@@ -12,7 +12,7 @@
   ansible.builtin.set_fact:
     policy_body: "{{ policy_body | combine(new_item, recursive=true) }}"
   vars:
-    new_item: "{{ dict('description': new_description) }}"
+    new_item: "{{ dict(['description', new_description]) }}"
   when: eda_event is defined
 
 - name: create new policy
