@@ -1,7 +1,9 @@
 - name: Check If file was among added files from Git Event Info
   ansible.builtin.set_fact:
-    file_created: "{{ eda_event.payload.commits.0|selectattr('added', 'contains', policy_file_name) }}"
-  when: ansible_eda.event.payload is defined
+    file_created: "true"
+  when: 
+    - ansible_eda.event.payload is defined
+    - policy_file_name in eda_event.payload.commits.0.added
 
 - name: Set new_commit_id
   ansible.builtin.set_fact:
