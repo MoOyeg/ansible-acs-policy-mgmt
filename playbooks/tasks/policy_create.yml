@@ -50,3 +50,4 @@
   no_log: false
   changed_when: true
   notify: "Push to git"
+  when: eda_event is not defined
