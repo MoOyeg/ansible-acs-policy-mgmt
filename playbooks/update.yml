@@ -12,7 +12,7 @@
     git_user: "{{ vaulted_git_user }}"
     git_pat: "{{ vaulted_git_pat }}"
     git_url: "{{ vaulted_git_url }}"
-    branch: working
+    branch: main
 
   tasks:
   - name: Set if playbook was EDA triggered
